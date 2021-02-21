@@ -7,21 +7,22 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 use app\model\Article;
-use app\model\User;
 use app\repository\articleRepository;
 use app\repository\categoryRepository;
-use app\repository\userRepository;
-use GrahamCampbell\ResultType\Result;
+use app\permissions\AuthorVoter;
 
 class ArticleController extends Controller
 {
     private $articleRepository;
     private $categoryRepository;
+    private $authorVoter;
 
     public function __construct()
     {
         $this->articleRepository  = new articleRepository();
         $this->categoryRepository = new categoryRepository();
+        $this->authorVoter        = new AuthorVoter();
+
     }
 
 
@@ -65,11 +66,12 @@ class ArticleController extends Controller
             $categories = $this->categoryRepository->findAll();
         }
         
-
+        
         if ($request->getMethod() === 'post'){
 
             //TODO validate data
             $body = $request->getBody();
+            
             
             $categoryId  = $body['categoryId'];
             $title       = $body['title'];
@@ -101,14 +103,10 @@ class ArticleController extends Controller
         
         if ($request->getMethod() === 'get') {
 
-            $body        = $request->getBody();
-
-            $article     = $this->articleRepository->findOne('id', $body['articleId']);
+            $body    = $request->getBody();
+            $article = $this->articleRepository->findOne('id', $body['articleId']);
            
-
-            if (! (Application::$app->session->get('user') === $article->getUserId())) {
-                return "you cant edit this article";
-            }
+            if ( !$this->authorVoter->canEdit($article)) return 'cant edit';
 
             $categories = $this->categoryRepository->findAll();
         }
@@ -141,13 +139,15 @@ class ArticleController extends Controller
 
     public function deleteArticle(Request $request, Response $response) 
     {   
+        if (! Application::$app->isLogged()){
+            $response->redirect('/login');
+        }
+
         $body = $request->getBody();
 
         $article = $this->articleRepository->findOne('id', $body['articleId']);
 
-        if (! (Application::$app->session->get('user') === $article->getUserId())) {
-            return "you cant delete this article";
-        }
+        if ( !$this->authorVoter->canDelete($article)) return 'cant delete';
 
         $this->articleRepository->remove($article);
         
