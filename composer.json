@@ -1,0 +1,18 @@
+{
+    "name": "mateusz/project",
+    "authors": [
+        {
+            "name": "hsdid",
+            "email": "murawskimat00@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "require": {
+        "vlucas/phpdotenv": "^5.3",
+        "vlucas/valitron": "^1.4"
+    }
+}
