@@ -1,11 +1,19 @@
 
+<?php
+use app\core\Application;
+?>
 <div class="row">
    
     
 </div>
 
 <div class="row mt-4">
-    
+    <?php if (Application::$app->session->getFlash('error_dashboard')){ ?>
+        <div class="alert alert-danger">
+        <?php echo print_r(Application::$app->session->getFlash('error_dashboard')); ?>
+        </div>
+    <?php }?>
+
     <h3>Dashboard with your articles</h3>
 
 

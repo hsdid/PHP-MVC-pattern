@@ -1,5 +1,16 @@
+<?php
+
+use app\core\Application;
+?>
+
 
 <h3>Edit Article</h3>
+
+<?php if (Application::$app->session->getFlash('error_article')){ ?>
+    <div class="alert alert-danger">
+    <?php echo print_r(Application::$app->session->getFlash('error_article')); ?>
+    </div>
+<?php }?>
 
 <form method="post">
     

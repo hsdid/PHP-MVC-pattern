@@ -1,10 +1,21 @@
 
+<?php
 
+use app\core\Application;
+?>
+<h3>Create Article</h3>
+
+<?php if (Application::$app->session->getFlash('error_article')){ ?>
+    <div class="alert alert-danger">
+    <?php echo print_r(Application::$app->session->getFlash('error_article')); ?>
+    </div>
+<?php }?>
 <form method="post" class="mt-4">
     
     <label for="title">Title</label>
     <input type="text" name="title" id="inputName" class="form-control" required autofocus>
 
+    
     <label for="description">Description</label>
     <textarea type="text" name="description" id="description" class="form-control" required>
     </textarea>

@@ -57,6 +57,7 @@ class Application
     {
         $this->user = null;
         $this->session->remove('user');
+        session_destroy();
     }
 
 }

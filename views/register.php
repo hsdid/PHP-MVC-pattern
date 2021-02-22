@@ -1,4 +1,11 @@
 <?php use app\core\Application; ?>
+
+<?php if (Application::$app->session->getFlash('error_register')){ ?>
+    <div class="alert alert-danger">
+    <?php echo print_r(Application::$app->session->getFlash('error_register')); ?>
+    </div>
+<?php }?>
+
 <div class="row">
 		<div class="span12 d-flex justify-content-center">
 			<form class="form-horizontal" action='' method="POST">

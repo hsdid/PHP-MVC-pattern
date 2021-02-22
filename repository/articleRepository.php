@@ -38,7 +38,9 @@ class articleRepository implements RepositoryInterface
         $stmt->execute([$data]);
 
         $article = $stmt->fetchObject(Article::class);
-
+        if(!$article) {
+            return null;
+        }
         $user = $this->userRepository->findOne('id',$article->getUserId());
         $article->setUser($user);
 

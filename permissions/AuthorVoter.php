@@ -7,8 +7,15 @@ use app\model\Article;
 class AuthorVoter
 {
     
-    public function canEdit(Article $article) 
-    {
+    
+
+    public function canEdit($article) 
+    {   
+
+        if (! $article instanceof Article) {
+            return false;
+        }
+
         if (! (Application::$app->session->get('user') === $article->getUserId())) {
             return false;
         }
@@ -16,8 +23,12 @@ class AuthorVoter
     }
 
 
-    public function canDelete(Article $article) 
+    public function canDelete($article) 
     {
+        if (! $article instanceof Article) {
+            return false;
+        }
+
         if (! (Application::$app->session->get('user') === $article->getUserId())) {
             return false;
         }

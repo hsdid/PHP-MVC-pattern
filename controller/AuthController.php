@@ -8,9 +8,7 @@ use app\core\Request;
 use app\core\Response;
 use app\model\User;
 use app\repository\userRepository;
-
-
-
+use app\validation\UserValidation;
 
 class AuthController extends Controller
 {   
@@ -26,34 +24,28 @@ class AuthController extends Controller
 
        //TODO validation data forms , error messages
 
-
-        if (Application::$app->isLogged()){
+        if (Application::$app->isLogged())
             $response->redirect('/dashboard');
-        }
-
 
         if ($request->getMethod() === 'post') {
+            
             $body = $request->getBody();
             
-            $name = $body['username'];
-            $email    = $body['email'];
-            $password = $body['password'];
-            $confirmPassword = $body['confirmPass'];
+            if (! UserValidation::register($body)) {
+               return $response->redirect('/register');
+            }
 
+            $name        = $body['username'];
+            $email       = $body['email'];
+            $password    = $body['password'];
+        
             $user = $this->userRepository->findOne('email', $email);
             if ($user) {
-                Application::$app->session->setFlash('error_email', 'Email aready exist');
+                Application::$app->session->setFlash('error_register', ' Same email aready exist');
                 $response->redirect('/register');
             }
             
-
-
-            if ($password === $confirmPassword){
-                $hashPassword = password_hash($password, PASSWORD_DEFAULT);
-            } else {
-                Application::$app->session->setFlash('error_password', 'Passwords do not match');
-                $response->redirect('/register');
-            }
+            $hashPassword = password_hash($password, PASSWORD_DEFAULT);
             
             $newUser = new User();
             $newUser->setName($name);
@@ -62,43 +54,59 @@ class AuthController extends Controller
 
             $this->userRepository->create($newUser);
 
+            Application::$app->session->remove('error_register');
             Application::$app->session->setFlash('success_message', 'Thenks for register, now lets log in');
-            $response->redirect('/login');
+
+            return $response->redirect('/login');
         }
-        
         return $this->render('register',[]);
     }
 
     public function login(Request $request, Response $response){
-        //TODO validation data forms , error messages
+       
 
         if (Application::$app->isLogged()){
-            $response->redirect('/dashboard');
+            return $response->redirect('/dashboard');
         }
 
         if ($request->getMethod() === 'post'){
             
             $body = $request->getBody();
 
+            if (! UserValidation::login($body)) {
+                return $response->redirect('/login');
+            }
+
             $user = $this->userRepository->findOne('email', $body['email']);
-            if (!$user) return "zly email albo haslo";
+            if (!$user) {
+                Application::$app->session->setFlash('error_login', 'Incorect password or email');
+                return $response->redirect('/login');
+            }
             
 
             $validPssword = password_verify($body['password'], $user->getPassword());
-            if (!$validPssword) return "zle haslo albo email";
+            if (!$validPssword) {
+                Application::$app->session->setFlash('error_login', 'Incorect password or email');
+                return $response->redirect('/login');
+            }
             
-            if (!Application::$app->login($user)) return "something went wrong";
+            if (!Application::$app->login($user)) {
+                Application::$app->session->setFlash('error_login', 'Something went wrong');
+                return $response->redirect('/login');
+            }
            
-
-            $response->redirect('/dashboard');
+            Application::$app->session->remove('error_login');
+            return $response->redirect('/dashboard');
         }
         
         
         return $this->render('login',[]);
     }
 
+
     public function logout(Request $request, Response $response)
-    {
+    {  
+        
         Application::$app->logout();
         $response->redirect('/');   
     }

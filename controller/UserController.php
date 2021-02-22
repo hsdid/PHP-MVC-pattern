@@ -25,7 +25,7 @@ class UserController extends Controller
         $body     = $request->getBody();
         $user     = $this->userRepository->findOne('id', $body['id']);
 
-        $articles = $this->userRepository->findArticles($user);
+        $articles = $this->userRepository->findPublicArticles($user);
         
         return $this->render('user/user', [
                                     'user'     => $user, 

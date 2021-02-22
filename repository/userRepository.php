@@ -109,8 +109,34 @@ class userRepository implements RepositoryInterface
         }
 
         return $results;
-        
+    }
+
+    public function findPublicArticles(User $user) 
+    {       
+        $results = array(); 
+      
+        $userId = $user->getId(); 
+        $tableU = $this->userTable;
+        $tableA = $this->articleTable;
+
+        $sql = "SELECT * FROM $tableU as u JOIN $tableA as a ON u.id=a.userId WHERE u.id = ? AND publicStatus=1";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$userId]);
+
        
+        while ($article = $stmt->fetchObject(Article::class)) {
+                
+            $user = $this->findOne('id', $article->getUserId());
+            $article->setUser($user);
+
+            $category = $this->categoryRepository->findOne('id',$article->getCategoryId());
+            $article->setCategory($category);
+
+                
+            array_push($results, $article);
+        }
+
+        return $results;
     }
 
 }
