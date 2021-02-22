@@ -11,10 +11,11 @@ class Article
     private $userId;
     private $title;
     private $description;
+    private $publicStatus;
     private $created_at;
     private $user;
     private $category;
-    public static $tableName = 'articles';
+    public  static $tableName = 'articles';
     
 
     public function getId (): ?int 
@@ -61,6 +62,16 @@ class Article
     public function setDescription (string $desc)
     {
         $this->description = $desc;
+    }
+
+    public function getPublicStatus ()
+    {
+        return $this->publicStatus;
+    }
+
+    public function setPublicStatus ($status)
+    {
+        $this->publicStatus = $status;
     }
 
     public function getCreatedAt()

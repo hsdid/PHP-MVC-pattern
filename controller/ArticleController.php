@@ -27,9 +27,10 @@ class ArticleController extends Controller
 
 
 
-    public function getArticles(Request $request, Response $response)
+    public function getPublicArticles(Request $request, Response $response)
     {
-        $articles = $this->articleRepository->findAll();
+        
+        $articles = $this->articleRepository->findAllPublic();
         $categories = $this->categoryRepository->findAll();
 
         return  $this->render('home',[
@@ -39,11 +40,12 @@ class ArticleController extends Controller
     }
 
 
-    public function getCategoryProduct(Request $request, Response $response) 
+    public function getCategoryPublicArticles(Request $request, Response $response) 
     {
         $body = $request->getBody();
         
-        $articles = $this->articleRepository->findCategoryById($body['categoryId']);
+        $articles = $this->articleRepository->findCategoryPublicArticles($body['categoryId']);
+
         $categories = $this->categoryRepository->findAll();
         
         return $this->render('home', [
@@ -135,6 +137,16 @@ class ArticleController extends Controller
                 ]
             );    
         
+    }
+
+    public function updateStatus(Request $request, Response $response) 
+    {
+        $body = $request->getBody();
+        $articleId = $body['articleId'];
+        $status    = $body['status'];
+
+        $this->articleRepository->updateStatus($status, $articleId);
+        $response->redirect('/dashboard');
     }
 
     public function deleteArticle(Request $request, Response $response) 

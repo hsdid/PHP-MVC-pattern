@@ -49,7 +49,7 @@ use app\core\Application;
   </div>
   </nav>
     <div class="container">
-     
+        
     {{content}}
     </div>
     

@@ -47,9 +47,6 @@ class articleRepository implements RepositoryInterface
 
         return $article;
       
-      
-    
-       
     }
     
     public function findAll()
@@ -80,12 +77,38 @@ class articleRepository implements RepositoryInterface
         
     }
 
-    public function findCategoryById($category)
+    public function findAllPublic() 
+    {
+        $results = array(); 
+        $tableA = $this->articleTable;
+
+        $sql = "SELECT * FROM  $tableA WHERE publicStatus=1";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        
+
+        while ($article = $stmt->fetchObject(Article::class)) {
+
+            $userId = $article->getUserId();
+            $user = $this->userRepository->findOne('id', $userId);
+            $article->setUser($user);
+
+            $categoryId = $article->getCategoryId();
+            $category = $this->categoryRepository->findOne('id', $categoryId); 
+            $article->setCategory($category);
+
+            array_push($results, $article);
+        }
+       
+        return $results;
+    }
+    
+    public function findCategoryPublicArticles($category)
     {   
         $results = array(); 
         $table = $this->articleTable;
 
-        $sql = "SELECT * FROM $table WHERE categoryId=? ";
+        $sql = "SELECT * FROM $table WHERE categoryId=? AND publicStatus=1";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$category]);
 
@@ -169,6 +192,17 @@ class articleRepository implements RepositoryInterface
 
     }
 
+    public function updateStatus($status, $articleId) 
+    {
+        $table  = $this->articleTable;
+
+        $sql  = "UPDATE $table SET publicStatus=? WHERE id=?";
+        $stmt = $this->pdo->prepare($sql);
+        
+        return $stmt->execute([$status, $articleId]);
+
+    }
+
     
     public function remove($article)
     {   
@@ -177,11 +211,11 @@ class articleRepository implements RepositoryInterface
         }
         $articleId = $article->getId();
         $table     = $this->articleTable;
-
+        
         $sql  = "DELETE FROM $table WHERE id = ?";
         $stmt = $this->pdo->prepare($sql);
         return  $stmt->execute([$articleId]);
-    
+        
     }   
 
 }

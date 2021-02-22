@@ -23,7 +23,7 @@ $dbConfig = [
 $app = new Application($dbConfig);
 
 
-$app->router->get('/', [ArticleController::class, 'getArticles']);
+$app->router->get('/', [ArticleController::class, 'getPublicArticles']);
 
 $app->router->get('/user',[UserController::class, 'getUser']);
 
@@ -45,9 +45,10 @@ $app->router->get('/logout', [AuthController::class, 'logout']);
 $app->router->get('/register', [AuthController::class, 'register']);
 $app->router->post('/register', [AuthController::class, 'register']);
 
+$app->router->get('/article/status', [ArticleController::class, 'updateStatus']);
 
-$app->router->get('/article/category', [ArticleController::class, 'getCategoryProduct']);
-$app->router->post('/article/category', [ArticleController::class, 'getCategoryProduct']);
+$app->router->get('/article/category', [ArticleController::class, 'getCategoryPublicArticles']);
+$app->router->post('/article/category', [ArticleController::class, 'getCategoryPublicArticles']);
 
 $app->router->get('/article/remove', [ArticleController::class, 'deleteArticle']);
 

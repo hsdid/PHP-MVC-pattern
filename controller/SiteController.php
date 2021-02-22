@@ -39,7 +39,6 @@ class SiteController extends Controller
         
         $categories = $this->categoryRepository->findAll();
 
-
         return $this->render('dashboard', [
                 'user'       => $currentUser,
                 'articles'   => $articles,
