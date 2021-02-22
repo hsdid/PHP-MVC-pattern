@@ -19,3 +19,5 @@ Validation library https://github.com/vlucas/valitron
 - Go to the public folder
 - Start php server by running command php -S localhost:8000
 - Open in browser http://localhost:8000
+
+- sample database on articles.sql
