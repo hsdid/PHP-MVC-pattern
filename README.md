@@ -4,7 +4,7 @@ MVC pattern no Frameworks
 Application 
 has 3 models User,Article,Category 
 
-- without login see the public articles, sort articles by category.
+- without login allow to see the public articles, sort articles by category.
 - User can Create, Edit, Delete Article, see other Articles,
 - Article can be public on private. 
 
