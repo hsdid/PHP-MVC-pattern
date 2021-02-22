@@ -13,9 +13,9 @@ Validation library https://github.com/vlucas/valitron
 
 
 
-1.Download the archive or clone the project using git
-2. Create .env file from .env.example file and adjust database parameters
-3. Run composer install
-4. Go to the public folder
-5. Start php server by running command php -S localhost:8000
-6. Open in browser http://localhost:8000/
+- Download the archive or clone the project using git
+- Create .env file from .env.example file and adjust database parameters
+- Run composer install
+- Go to the public folder
+- Start php server by running command php -S localhost:8000
+- Open in browser http://localhost:8000
