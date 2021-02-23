@@ -6,6 +6,7 @@ class Category
 {
     private $id;
     private $name;
+    // modele nie mają nic wspólnego z bazą danych. Chyba, że miał to być ActiveRecord.. ale na to nie wygląda
     public static $tableName = 'category';
 
     

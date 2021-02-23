@@ -1,5 +1,7 @@
 <?php 
 namespace app\core;
+//odstępy
+// ta klasa imo nie robi nic konkretnego, jeżęli już by byla to powinna być abstrakcyjna i modele ją dziedizczyć by mieć dostęp do obiektu pdo
 class Database 
 {
 

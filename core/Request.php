@@ -9,7 +9,8 @@ class Request {
        
         $path = $_SERVER['REQUEST_URI'] ??  '/';
 
-        
+
+        //tego ifa i tą zmienną można skrócić do postaci  strpos .. === false
         $position = strpos($path, '?');
 
         

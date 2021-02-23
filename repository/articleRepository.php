@@ -114,6 +114,7 @@ class articleRepository implements RepositoryInterface
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$category]);
 
+        //na litosc, foreach...
         while ($article = $stmt->fetchObject(Article::class)) {
 
             $userId = $article->getUserId();
