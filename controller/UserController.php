@@ -8,16 +8,14 @@ use app\core\Response;
 use app\repository\articleRepository;
 use app\repository\userRepository;
 
-class UserController extends Controller 
+class UserController extends Controller
 {
-    
+    /** @var userRepository  */
     private $userRepository;
   
-
     public function __construct()
     {
         $this->userRepository    = new userRepository();
-        
     }
 
     public function getUser(Request $request, Response $response)
@@ -28,9 +26,8 @@ class UserController extends Controller
         $articles = $this->userRepository->findPublicArticles($user);
         
         return $this->render('user/user', [
-                                    'user'     => $user, 
+                                    'user'     => $user,
                                     'articles' => $articles
                                     ]);
     }
-    
 }

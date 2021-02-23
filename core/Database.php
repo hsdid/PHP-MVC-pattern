@@ -1,8 +1,8 @@
-<?php 
+<?php
 namespace app\core;
-class Database 
-{
 
+class Database
+{
     public \PDO $pdo;
 
     public function __construct(array $dbConfig)
@@ -13,9 +13,5 @@ class Database
 
         $this->pdo = new \PDO($dsn, $user, $password);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION); // when problem with connection trow expection
-
     }
-
-
-
 }

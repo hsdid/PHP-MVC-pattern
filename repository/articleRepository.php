@@ -9,8 +9,6 @@ use app\model\User;
 
 class articleRepository implements RepositoryInterface
 {
-
-    private $userTable;
     private $articleTable;
     private $pdo;
     private $userRepository;
@@ -18,19 +16,16 @@ class articleRepository implements RepositoryInterface
 
     public function __construct()
     {
-        
         $this->userTable          = User::$tableName;
         $this->articleTable       = Article::$tableName;
         $this->pdo                = Application::$app->db->pdo;
         $this->categoryRepository = new categoryRepository();
         $this->userRepository     = new userRepository();
-
     }
 
 
-    public function findOne($field, $data)
+    public function findOne($field, $data): Article
     {
-        
         $table = $this->articleTable;
 
         $sql = "SELECT * from $table WHERE `$field`=?";
@@ -38,23 +33,21 @@ class articleRepository implements RepositoryInterface
         $stmt->execute([$data]);
 
         $article = $stmt->fetchObject(Article::class);
-        if(!$article) {
+        if (!$article) {
             return null;
         }
-        $user = $this->userRepository->findOne('id',$article->getUserId());
+        $user = $this->userRepository->findOne('id', $article->getUserId());
         $article->setUser($user);
 
-        $category = $this->categoryRepository->findOne('id', $article->getCategoryId()); 
+        $category = $this->categoryRepository->findOne('id', $article->getCategoryId());
         $article->setCategory($category);
 
         return $article;
-      
     }
     
-    public function findAll()
-    {   
-        
-        $results = array(); 
+    public function findAll(): array
+    {
+        $results = array();
         $tableA = $this->articleTable;
 
         $sql = "SELECT * FROM  $tableA";
@@ -63,40 +56,12 @@ class articleRepository implements RepositoryInterface
         
 
         while ($article = $stmt->fetchObject(Article::class)) {
-
             $userId = $article->getUserId();
             $user = $this->userRepository->findOne('id', $userId);
             $article->setUser($user);
 
             $categoryId = $article->getCategoryId();
-            $category = $this->categoryRepository->findOne('id', $categoryId); 
-            $article->setCategory($category);
-
-            array_push($results, $article);
-        }
-       
-        return $results;
-        
-    }
-
-    public function findAllPublic() 
-    {
-        $results = array(); 
-        $tableA = $this->articleTable;
-
-        $sql = "SELECT * FROM  $tableA WHERE publicStatus=1";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        
-
-        while ($article = $stmt->fetchObject(Article::class)) {
-
-            $userId = $article->getUserId();
-            $user = $this->userRepository->findOne('id', $userId);
-            $article->setUser($user);
-
-            $categoryId = $article->getCategoryId();
-            $category = $this->categoryRepository->findOne('id', $categoryId); 
+            $category = $this->categoryRepository->findOne('id', $categoryId);
             $article->setCategory($category);
 
             array_push($results, $article);
@@ -104,64 +69,73 @@ class articleRepository implements RepositoryInterface
        
         return $results;
     }
+
     
-    public function findCategoryPublicArticles($category)
+    public function findCategoryPublicArticles($category): array
     {   
-        $results = array(); 
+        $results = array();
         $table = $this->articleTable;
 
-        $sql = "SELECT * FROM $table WHERE categoryId=? AND publicStatus=1";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$category]);
+        if ($category === 'all') {
+            $sql = "SELECT * FROM $table WHERE publicStatus=1";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+
+        } else {
+            $sql = "SELECT * FROM $table WHERE categoryId=? AND publicStatus=1";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$category]);
+        }
 
         while ($article = $stmt->fetchObject(Article::class)) {
-
             $userId = $article->getUserId();
             $user = $this->userRepository->findOne('id', $userId);
             $article->setUser($user);
 
             $categoryId = $article->getCategoryId();
-            $category = $this->categoryRepository->findOne('id', $categoryId); 
+            $category = $this->categoryRepository->findOne('id', $categoryId);
             $article->setCategory($category);
 
             array_push($results, $article);
         }
 
         return $results;
-
     }
 
-    public function findUserCategoryArticles($category, $user)
-    {   
-        $results = array(); 
+    public function findUserCategoryArticles($category, $user): array
+    {
+        $results = array();
         $table = $this->articleTable;
 
-        $sql = "SELECT * FROM $table WHERE categoryId=? AND userId=?" ;
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$category, $user]);
+        if ($category === 'all') {
+            $sql = "SELECT * FROM $table WHERE userId=?" ;
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$user]);
+        } else {
+            $sql = "SELECT * FROM $table WHERE categoryId=? AND userId=?" ;
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$category, $user]);
+        }
 
         while ($article = $stmt->fetchObject(Article::class)) {
-
             $userId = $article->getUserId();
             $user = $this->userRepository->findOne('id', $userId);
             $article->setUser($user);
 
             $categoryId = $article->getCategoryId();
-            $category = $this->categoryRepository->findOne('id', $categoryId); 
+            $category = $this->categoryRepository->findOne('id', $categoryId);
             $article->setCategory($category);
 
             array_push($results, $article);
         }
 
         return $results;
-
     }
 
 
 
     public function create($article)
     {
-    
         $table = $this->articleTable;
 
         $categoryId  = $article->getCategoryId();
@@ -178,7 +152,7 @@ class articleRepository implements RepositoryInterface
         return $article;
     }
 
-    public function update(Article $article) 
+    public function update(Article $article)
     {
         $table  = $this->articleTable;
 
@@ -191,10 +165,9 @@ class articleRepository implements RepositoryInterface
         $stmt = $this->pdo->prepare($sql);
 
         return $stmt->execute([$categoryId, $title, $description, $articleId]);
-
     }
 
-    public function updateStatus($status, $articleId) 
+    public function updateStatus($status, $articleId)
     {
         $table  = $this->articleTable;
 
@@ -202,12 +175,11 @@ class articleRepository implements RepositoryInterface
         $stmt = $this->pdo->prepare($sql);
         
         return $stmt->execute([$status, $articleId]);
-
     }
 
     
     public function remove($article)
-    {   
+    {
         if (!$article) {
             return null;
         }
@@ -217,7 +189,5 @@ class articleRepository implements RepositoryInterface
         $sql  = "DELETE FROM $table WHERE id = ?";
         $stmt = $this->pdo->prepare($sql);
         return  $stmt->execute([$articleId]);
-        
-    }   
-
+    }
 }

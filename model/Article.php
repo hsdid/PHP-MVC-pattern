@@ -4,7 +4,7 @@ namespace app\model;
 
 use DateTime;
 
-class Article 
+class Article
 {
     private $id;
     private $categoryId;
@@ -15,71 +15,71 @@ class Article
     private $created_at;
     private $user;
     private $category;
-    public  static $tableName = 'articles';
+    public static $tableName = 'articles';
     
 
-    public function getId (): ?int 
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId (int $id)
+    public function setId(int $id)
     {
         $this->id = $id;
     }
-    public function getCategoryId (): ?int
+    public function getCategoryId(): ?int
     {
         return $this->categoryId;
     }
 
-    public function setCategoryId (int $id)
+    public function setCategoryId(int $id)
     {
         $this->categoryId = $id;
     }
-    public function getUserId (): ?int 
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
 
-    public function setUserId (int $id)
+    public function setUserId(int $id)
     {
         $this->userId = $id;
     }
-    public function getTitle () : string
+    public function getTitle() : string
     {
         return $this->title;
     }
 
-    public function setTitle (string $title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
     }
-    public function getDescription (): string
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function setDescription (string $desc)
+    public function setDescription(string $desc)
     {
         $this->description = $desc;
     }
 
-    public function getPublicStatus ()
+    public function getPublicStatus()
     {
         return $this->publicStatus;
     }
 
-    public function setPublicStatus ($status)
+    public function setPublicStatus($status)
     {
         $this->publicStatus = $status;
     }
 
     public function getCreatedAt()
-    {   
+    {
         return $this->created_at;
     }
 
-    public function setCreatedAt (\DateTime $date)
+    public function setCreatedAt(\DateTime $date)
     {
         $this->created_at = $date;
     }
@@ -103,6 +103,4 @@ class Article
     {
         $this->category = $category;
     }
-
-
 }

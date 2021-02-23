@@ -2,14 +2,10 @@
 
 namespace app\core;
 
-class Session 
+class Session
 {
-
-   
-
-
     public function __construct()
-    {   
+    {
         session_start();
     }
     public function setFlash($key, $message)
@@ -18,17 +14,16 @@ class Session
     }
 
     public function getFlash($key)
-    {   
-
+    {
         return $_SESSION[$key]?? null;
     }
 
-    public function set ($key, $value) 
+    public function set($key, $value)
     {
         $_SESSION[$key] = $value;
     }
 
-    public function get ($key) 
+    public function get($key)
     {
         return $_SESSION[$key]?? null;
     }
@@ -37,5 +32,4 @@ class Session
     {
         unset($_SESSION[$key]);
     }
-
 }

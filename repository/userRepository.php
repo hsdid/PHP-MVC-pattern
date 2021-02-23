@@ -6,10 +6,8 @@ use app\core\RepositoryInterface;
 use app\model\User;
 use app\model\Article;
 
-
 class userRepository implements RepositoryInterface
 {
-   
     private $userTable;
     private $articleTable;
     private $pdo;
@@ -18,15 +16,14 @@ class userRepository implements RepositoryInterface
 
     public function __construct()
     {
-        
         $this->userTable          = User::$tableName;
         $this->articleTable       = Article::$tableName;
         $this->pdo                = Application::$app->db->pdo;
         $this->categoryRepository = new categoryRepository();
-    }   
+    }
 
     public function create($user)
-    {   
+    {
         $table = $this->userTable;
 
         $name     = $user->getName();
@@ -39,10 +36,9 @@ class userRepository implements RepositoryInterface
         return $user;
     }
 
-    public function findAll () 
-    { 
-        
-        $results = array(); 
+    public function findAll()
+    {
+        $results = array();
         $table = $this->userTable;
         $sql = "SELECT * FROM  $table";
         $stmt = $this->pdo->prepare($sql);
@@ -57,8 +53,8 @@ class userRepository implements RepositoryInterface
     }
 
    
-    public function findOne($field, $data) 
-    {   
+    public function findOne($field, $data)
+    {
         $table = $this->userTable;
         
 
@@ -67,10 +63,10 @@ class userRepository implements RepositoryInterface
         $stmt->execute([$data]);
 
         return $stmt->fetchObject(User::class);
-    }  
+    }
 
-    public function remove ($user)
-    {   
+    public function remove($user)
+    {
         $userId = $user->getId;
         $table  = $this->userTable;
 
@@ -83,11 +79,11 @@ class userRepository implements RepositoryInterface
     }
 
 
-    public function findArticles(User $user) 
-    {       
-        $results = array(); 
+    public function findArticles(User $user)
+    {
+        $results = array();
       
-        $userId = $user->getId(); 
+        $userId = $user->getId();
         $tableU = $this->userTable;
         $tableA = $this->articleTable;
 
@@ -97,11 +93,10 @@ class userRepository implements RepositoryInterface
 
        
         while ($article = $stmt->fetchObject(Article::class)) {
-                
             $user = $this->findOne('id', $article->getUserId());
             $article->setUser($user);
 
-            $category = $this->categoryRepository->findOne('id',$article->getCategoryId());
+            $category = $this->categoryRepository->findOne('id', $article->getCategoryId());
             $article->setCategory($category);
 
                 
@@ -111,11 +106,11 @@ class userRepository implements RepositoryInterface
         return $results;
     }
 
-    public function findPublicArticles(User $user) 
-    {       
-        $results = array(); 
+    public function findPublicArticles(User $user)
+    {
+        $results = array();
       
-        $userId = $user->getId(); 
+        $userId = $user->getId();
         $tableU = $this->userTable;
         $tableA = $this->articleTable;
 
@@ -125,11 +120,10 @@ class userRepository implements RepositoryInterface
 
        
         while ($article = $stmt->fetchObject(Article::class)) {
-                
             $user = $this->findOne('id', $article->getUserId());
             $article->setUser($user);
 
-            $category = $this->categoryRepository->findOne('id',$article->getCategoryId());
+            $category = $this->categoryRepository->findOne('id', $article->getCategoryId());
             $article->setCategory($category);
 
                 
@@ -138,5 +132,4 @@ class userRepository implements RepositoryInterface
 
         return $results;
     }
-
 }

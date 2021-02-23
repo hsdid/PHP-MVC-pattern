@@ -6,7 +6,7 @@
             <option value="/">All categories</option>
             <?php foreach ($categories as $category ){  ?>
                 
-                <option value="/article/category?categoryId=<?php echo $category->getId() ?>"> 
+                <option value="/?categoryId=<?php echo $category->getId() ?>"> 
                     
                         <?php echo $category->getName(); ?>
                    

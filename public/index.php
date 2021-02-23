@@ -7,7 +7,6 @@ use app\controller\AuthController;
 use app\controller\SiteController;
 use app\controller\UserController;
 
-
 require_once __DIR__.'/../vendor/autoload.php';
 
 $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__));
@@ -23,18 +22,19 @@ $dbConfig = [
 $app = new Application($dbConfig);
 
 
-$app->router->get('/', [ArticleController::class, 'getPublicArticles']);
+$app->router->get('/', [ArticleController::class, 'getCategoryPublicArticles']);
 
-$app->router->get('/user',[UserController::class, 'getUser']);
+$app->router->get('/user', [UserController::class, 'getUser']);
 
-$app->router->get('/article/edit',[ArticleController::class, 'editArticle']);
-$app->router->post('/article/edit',[ArticleController::class, 'editArticle']);
+$app->router->get('/article/edit', [ArticleController::class, 'editArticle']);
+$app->router->post('/article/edit', [ArticleController::class, 'editArticle']);
 
 $app->router->get('/dashboard', [SiteController::class, 'dashboard']);
 $app->router->get('/dashboard/category', [SiteController::class, 'getUserCategoryProducts']);
 
-$app->router->get('/article',[ArticleController::class, 'createArticle']);
-$app->router->post('/article',[ArticleController::class, 'createArticle']);
+
+$app->router->get('/article', [ArticleController::class, 'createArticle']);
+$app->router->post('/article', [ArticleController::class, 'createArticle']);
 
 $app->router->get('/login', [AuthController::class, 'login']);
 $app->router->post('/login', [AuthController::class, 'login']);
@@ -47,10 +47,6 @@ $app->router->post('/register', [AuthController::class, 'register']);
 
 $app->router->get('/article/status', [ArticleController::class, 'updateStatus']);
 
-$app->router->get('/article/category', [ArticleController::class, 'getCategoryPublicArticles']);
-$app->router->post('/article/category', [ArticleController::class, 'getCategoryPublicArticles']);
-
 $app->router->get('/article/remove', [ArticleController::class, 'deleteArticle']);
 
 $app->run();
-    

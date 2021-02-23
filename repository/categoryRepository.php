@@ -7,9 +7,7 @@ use app\core\RepositoryInterface;
 use app\model\Category;
 
 class categoryRepository implements RepositoryInterface
-{   
-
-
+{
     private $categoryTable;
     private $pdo;
 
@@ -38,7 +36,7 @@ class categoryRepository implements RepositoryInterface
 
     public function findAll()
     {
-        $results = array(); 
+        $results = array();
         $table = $this->categoryTable;
         $sql = "SELECT * FROM  $table";
         $stmt = $this->pdo->prepare($sql);
@@ -49,16 +47,13 @@ class categoryRepository implements RepositoryInterface
         }
        
         return $results;
-        
     }
 
 
     public function create($object)
     {
-
     }
     public function remove($object)
     {
-
     }
 }

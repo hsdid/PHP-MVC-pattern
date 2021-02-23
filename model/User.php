@@ -1,8 +1,7 @@
 <?php
 namespace app\model;
 
-
-class User 
+class User
 {
     private $id;
     private $name;
@@ -11,47 +10,47 @@ class User
     // private $articles;
     public static $tableName = 'users';
 
-    public function getId ():int 
+    public function getId():int
     {
         return $this->id;
     }
 
-    public function setId (int $id) 
+    public function setId(int $id)
     {
         $this->id = $id;
     }
 
-    public function getName ()
+    public function getName()
     {
         return $this->name;
     }
 
-    public function setName (string $name) 
+    public function setName(string $name)
     {
         $this->name = $name;
     }
 
-    public function getEmail ():string 
+    public function getEmail():string
     {
         return $this->email;
     }
 
-    public function setEmail (string $email)
+    public function setEmail(string $email)
     {
         $this->email = $email;
     }
 
-    public function getPassword ():string 
+    public function getPassword():string
     {
         return $this->password;
     }
 
-    public function setPassword (string $password) 
+    public function setPassword(string $password)
     {
         $this->password = $password;
     }
 
-    public function tableName():string 
+    public function tableName():string
     {
         return $this->tableName;
     }
@@ -65,7 +64,4 @@ class User
     // {
     //     $this->articles = $arr;
     // }
-
-    
-
-}   
+}

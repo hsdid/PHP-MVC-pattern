@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace app\controller;
 
@@ -12,13 +12,13 @@ use app\repository\categoryRepository;
 use app\permissions\AuthorVoter;
 use app\validation\ArticleValidation;
 
-
-
-
-class ArticleController extends Controller
+final class ArticleController extends Controller
 {
+    /** @var articleRepository  */
     private $articleRepository;
+    /** @var categoryRepository  */
     private $categoryRepository;
+     /** @var AuthorVoter  */
     private $authorVoter;
 
     public function __construct()
@@ -26,27 +26,20 @@ class ArticleController extends Controller
         $this->articleRepository  = new articleRepository();
         $this->categoryRepository = new categoryRepository();
         $this->authorVoter        = new AuthorVoter();
-
-    }
-
-    public function getPublicArticles(Request $request, Response $response)
-    {
-        
-        $articles = $this->articleRepository->findAllPublic();
-        $categories = $this->categoryRepository->findAll();
-
-        return  $this->render('home',[
-                        'articles'   => $articles,
-                        'categories' => $categories
-                    ]); 
     }
 
 
-    public function getCategoryPublicArticles(Request $request, Response $response) 
+   
+    public function getCategoryPublicArticles(Request $request, Response $response)
     {
         $body = $request->getBody();
-        
-        $articles = $this->articleRepository->findCategoryPublicArticles($body['categoryId']);
+
+        if (! isset($body['categoryId'])){
+            $articles = $this->articleRepository->findCategoryPublicArticles('all');
+        } else {
+            $articles = $this->articleRepository->findCategoryPublicArticles($body['categoryId']);
+        }
+
         $categories = $this->categoryRepository->findAll();
         
         return $this->render('home', [
@@ -57,22 +50,23 @@ class ArticleController extends Controller
 
    
 
-
     public function createArticle(Request $request, Response $response)
-    {   
-       
-        if (! Application::$app->isLogged()) 
+    {
+        if (! Application::$app->isLogged()) {
             return $response->redirect('/login');
+        }
 
-        if ($request->getMethod() === 'get') 
-            $categories = $this->categoryRepository->findAll();
+      
+        $categories = $this->categoryRepository->findAll();
         
-        if ($request->getMethod() === 'post'){
+        
+        if ($request->getMethod() === 'post') {
             $body = $request->getBody();
             
             
-            if (! ArticleValidation::createArticle($body)) 
+            if (! ArticleValidation::Article($body)) {
                 return $response->redirect('/article');
+            }
 
             $article = $this->articleRepository->findOne('title', $body['title']);
 
@@ -95,46 +89,46 @@ class ArticleController extends Controller
             $article->setTitle($title);
             $article->setDescription($description);
 
-            if ($this->articleRepository->create($article)) 
+            if ($this->articleRepository->create($article)) {
                 Application::$app->session->remove('error_article');
-                return $response->redirect('/dashboard');
-            
+            }
+            return $response->redirect('/dashboard');
         }
         return $this->render('/article/new', ['categories' => $categories]);
     }
 
 
-    public function editArticle(Request $request, Response $response) 
-    {   
-        if (! Application::$app->isLogged()){
+    public function editArticle(Request $request, Response $response)
+    {
+        if (! Application::$app->isLogged()) {
             return $response->redirect('/login');
         }
         
-        if ($request->getMethod() === 'get') {
+        
 
-            $body    = $request->getBody();
-            $article = $this->articleRepository->findOne('id', $body['articleId']);
+        $body    = $request->getBody();
+        $article = $this->articleRepository->findOne('id', $body['articleId']);
            
-            if ( !$this->authorVoter->canEdit($article)) {
-                Application::$app->session->setFlash('error_dashboard', 'Cant edit this article');
-                return $response->redirect('/dashboard');
-            }
+        if (!$this->authorVoter->belongToUser($article)) {
+            Application::$app->session->setFlash('error_dashboard', 'Cant edit this article');
+            return $response->redirect('/dashboard');
+        }
                 
 
-            $categories = $this->categoryRepository->findAll();
-        }
+        $categories = $this->categoryRepository->findAll();
+      
 
 
         if ($request->getMethod() === 'post') {
-
             $articleId = $_GET['articleId'];
             $article = $this->articleRepository->findOne('id', $articleId);
 
             $body = $request->getBody();
             
-             //validation $body
-            if (! ArticleValidation::editArticle($body)) 
+            //validation $body
+            if (! ArticleValidation::Article($body)) {
                 return $response->redirect('/');
+            }
             
             $article->setCategoryId($body['categoryId']);
             $article->setTitle($body['title']);
@@ -146,15 +140,16 @@ class ArticleController extends Controller
             return $response->redirect('/dashboard');
         }
     
-        return $this->render('article/edit', [
+        return $this->render(
+            'article/edit',
+            [
                     'article'    => $article,
                     'categories' => $categories
                 ]
-            );    
-        
+        );
     }
 
-    public function updateStatus(Request $request, Response $response) 
+    public function updateStatus(Request $request, Response $response)
     {
         $body = $request->getBody();
         $articleId = $body['articleId'];
@@ -164,9 +159,9 @@ class ArticleController extends Controller
         $response->redirect('/dashboard');
     }
 
-    public function deleteArticle(Request $request, Response $response) 
-    {   
-        if (! Application::$app->isLogged()){
+    public function deleteArticle(Request $request, Response $response)
+    {
+        if (! Application::$app->isLogged()) {
             return $response->redirect('/login');
         }
 
@@ -175,7 +170,7 @@ class ArticleController extends Controller
         $article = $this->articleRepository->findOne('id', $body['articleId']);
         
 
-        if ( !$this->authorVoter->canDelete($article)) {
+        if (!$this->authorVoter->belongToUser($article)) {
             Application::$app->session->setFlash('error_dashboard', 'Cant remove this article');
             return $response->redirect('/dashboard');
         }

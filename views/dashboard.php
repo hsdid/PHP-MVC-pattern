@@ -23,7 +23,7 @@ use app\core\Application;
             <option  value="/dashboard" >All categories</option>
             <?php foreach ($categories as $category ){  ?>
                 
-                <option value="/dashboard/category?categoryId=<?php echo $category->getId() ?>"> 
+                <option value="/dashboard?categoryId=<?php echo $category->getId() ?>"> 
                     
                         <?php echo $category->getName(); ?>
                    
