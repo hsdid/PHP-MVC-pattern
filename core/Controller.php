@@ -1,9 +1,10 @@
 <?php
-namespace app\core;
-class Controller 
+namespace app\core; // odstępy, znów brak formatowania
+class Controller  // ten kontroler powinien robić więcej i być abstrakcyjny
 {
 
-    public function render ($view, $params) 
+    // brak type hintów, return type,
+    public function render ($view, $params)
     {
         return Application::$app->router->renderView($view, $params);
     }

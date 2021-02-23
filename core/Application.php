@@ -3,6 +3,7 @@ namespace app\core;
 
 class Application 
 {
+    //publiczne atrybuty? a po co ?
     public Router      $router;
     public Request     $request;
     public Response    $response;
@@ -24,8 +25,10 @@ class Application
 
 
 
+    // brak return type w kadej poniższej metodzie
     public function run() 
     {
+        // echo ?
         echo $this->router->resolve();   
     }
     

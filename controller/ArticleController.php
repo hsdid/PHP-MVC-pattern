@@ -11,16 +11,23 @@ use app\repository\articleRepository;
 use app\repository\categoryRepository;
 use app\permissions\AuthorVoter;
 use app\validation\ArticleValidation;
+//za dużo wolnej przestrzeni. Błędne formatowanie
 
-
-
-
+// klasa powina być onaczona jako final, raczej nie będziesz jej rozszerzał
 class ArticleController extends Controller
 {
+    // Brak type hintów, jeżeli nie używasz php 7.4 to przynajmniej powinneneś dodać adblock
+    /** @var articleRepository  */
     private $articleRepository;
+    /** @var categoryRepository  */
     private $categoryRepository;
+    /** @var AuthorVoter  */
     private $authorVoter;
 
+    /*
+     * Tutaj wszystko powinno być wstrzykiwane przez kontener - jeżeli już pisałeś własne mvc mogłeś dopisac coś jakiś
+     * prosty kontener zależności.
+     */
     public function __construct()
     {
         $this->articleRepository  = new articleRepository();
@@ -29,9 +36,16 @@ class ArticleController extends Controller
 
     }
 
-    public function getPublicArticles(Request $request, Response $response)
+    // brak return type
+    public function getPublicArticles(Request $request, Response $response) // ??
     {
-        
+
+        /*
+         * Imo, w kontrolerze nie powinno się wyciągać danych, wykonywać zapytań sql itd. Od tego masz serwisy
+         * ewentualnie jak korzystasz z wzorca ADR i pełnego CQRS to repo powinenś przekazać do handlera wiadomości.
+         */
+
+        // nie sprawdzasz czy w ogóle coś pobrałeś, imo łamiesz SRP, ta funkcja pobiera i artykuły i kategorie. Robi 2 rzeczy
         $articles = $this->articleRepository->findAllPublic();
         $categories = $this->categoryRepository->findAll();
 
@@ -42,6 +56,7 @@ class ArticleController extends Controller
     }
 
 
+    //ta funckcja wygląda trochę na duplikat tej powyższej.
     public function getCategoryPublicArticles(Request $request, Response $response) 
     {
         $body = $request->getBody();
@@ -54,7 +69,7 @@ class ArticleController extends Controller
                         'categories' => $categories
                     ]);
     }
-
+//znowu brak formatowania
    
 
 
@@ -64,13 +79,17 @@ class ArticleController extends Controller
         if (! Application::$app->isLogged()) 
             return $response->redirect('/login');
 
+
+        /*
+         * w zależności od rodzaju metody http pobierasz body albo z repo? coś mi tutaj nie gra logicznie
+         */
         if ($request->getMethod() === 'get') 
             $categories = $this->categoryRepository->findAll();
         
         if ($request->getMethod() === 'post'){
             $body = $request->getBody();
             
-            
+            //brak spacji
             if (! ArticleValidation::createArticle($body)) 
                 return $response->redirect('/article');
 

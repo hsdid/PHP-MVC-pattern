@@ -44,7 +44,7 @@ class AuthController extends Controller
                 Application::$app->session->setFlash('error_register', ' Same email aready exist');
                 $response->redirect('/register');
             }
-            
+            //kontroler nie zajmuje się hashowaniem haseł itd, to się robi w serwisach.
             $hashPassword = password_hash($password, PASSWORD_DEFAULT);
             
             $newUser = new User();
