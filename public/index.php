@@ -6,6 +6,7 @@ use app\controller\AuthController;
 
 use app\controller\SiteController;
 use app\controller\UserController;
+use app\services\Container;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
@@ -19,8 +20,12 @@ $dbConfig = [
 ];
 
 
+$container = new Container();
+
+
 $app = new Application($dbConfig);
 
+$app->router->setDependencies($container);
 
 $app->router->get('/', [ArticleController::class, 'getCategoryPublicArticles']);
 
@@ -48,5 +53,6 @@ $app->router->post('/register', [AuthController::class, 'register']);
 $app->router->get('/article/status', [ArticleController::class, 'updateStatus']);
 
 $app->router->get('/article/remove', [ArticleController::class, 'deleteArticle']);
+
 
 $app->run();
