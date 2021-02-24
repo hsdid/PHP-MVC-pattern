@@ -6,9 +6,7 @@ use app\core\Application;
 use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
-use app\repository\articleRepository;
-use app\repository\categoryRepository;
-
+use app\services\Container;
 
 class SiteController extends Controller
 {
@@ -16,11 +14,15 @@ class SiteController extends Controller
     private $categoryRepository;
     /** @var articleRepository  */
     private $articleRepository;
+    /** @var Container */
+    private $container;
 
-    public function __construct()
+    public function __construct(Container $container)
     {
-        $this->categoryRepository = new categoryRepository();
-        $this->articleRepository  = new articleRepository();
+        $this->container = $container;
+        $this->articleRepository = $this->container->get('articleRepository');
+        $this->categoryRepository = $this->container->get('categoryRepository');
+        
     }
     
     public function dashboard(Request $request, Response $response)

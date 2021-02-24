@@ -7,27 +7,33 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 use app\model\Article;
-use app\repository\articleRepository;
-use app\repository\categoryRepository;
-use app\permissions\AuthorVoter;
+use app\services\Container;
 use app\validation\ArticleValidation;
 
-final class ArticleController extends Controller
-{
+
+class ArticleController extends Controller
+{   
+    
     /** @var articleRepository  */
     private $articleRepository;
+
     /** @var categoryRepository  */
     private $categoryRepository;
+
      /** @var AuthorVoter  */
     private $authorVoter;
 
-    public function __construct()
-    {
-        $this->articleRepository  = new articleRepository();
-        $this->categoryRepository = new categoryRepository();
-        $this->authorVoter        = new AuthorVoter();
-    }
+    /** @var Container */
+    private $container;
 
+ 
+    public function __construct(Container $container)
+    {   
+        $this->container = $container;
+        $this->articleRepository = $this->container->get('articleRepository');
+        $this->categoryRepository = $this->container->get('categoryRepository');
+        $this->authorVoter = $this->container->get('authorVoter');
+    }
 
    
     public function getCategoryPublicArticles(Request $request, Response $response)
@@ -36,6 +42,7 @@ final class ArticleController extends Controller
 
         if (! isset($body['categoryId'])){
             $articles = $this->articleRepository->findCategoryPublicArticles('all');
+           
         } else {
             $articles = $this->articleRepository->findCategoryPublicArticles($body['categoryId']);
         }

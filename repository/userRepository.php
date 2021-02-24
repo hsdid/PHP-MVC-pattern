@@ -53,7 +53,7 @@ class userRepository implements RepositoryInterface
     }
 
    
-    public function findOne($field, $data)
+    public function findOne($field, $data): User
     {
         $table = $this->userTable;
         

@@ -8,7 +8,7 @@ use app\model\Article;
 use app\model\User;
 
 class articleRepository implements RepositoryInterface
-{
+{   
     private $articleTable;
     private $pdo;
     private $userRepository;
@@ -24,7 +24,7 @@ class articleRepository implements RepositoryInterface
     }
 
 
-    public function findOne($field, $data): Article
+    public function findOne($field, $data)
     {
         $table = $this->articleTable;
 

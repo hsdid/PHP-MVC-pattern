@@ -2,16 +2,20 @@
 
 namespace app\core;
 
+use app\services\Container;
+
 class Router
 {
     public Request  $request;
     public Response $response;
+    public Container $container;
     protected array $routes = [];
 
-    public function __construct(Request $request, Response $response)
+    public function __construct(Request $request, Response $response, Container $container)
     {
-        $this->request  = $request;
-        $this->response = $response;
+        $this->request   = $request;
+        $this->response  = $response;
+        $this->container = $container;
     }
 
     public function get($path, $callback)
@@ -24,8 +28,6 @@ class Router
         $this->routes['post'][$path] = $callback;
     }
 
-
-    
     public function delete($path, $callback)
     {
         $this->routes['delete'][$path] = $callback;
@@ -48,10 +50,14 @@ class Router
         }
 
         if (is_array($callback)) {
-            $callback[0] = new $callback[0];
+            
+            $class = $callback[0];
+
+            $callback[0] = new $class($this->container);
         }
         
         return call_user_func($callback, $this->request, $this->response);
+
     }
 
 

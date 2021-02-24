@@ -5,17 +5,20 @@ namespace app\controller;
 use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
-use app\repository\articleRepository;
-use app\repository\userRepository;
+use app\services\Container;
 
 class UserController extends Controller
 {
     /** @var userRepository  */
     private $userRepository;
-  
-    public function __construct()
+    /** @var Container */
+    private $container;
+
+
+    public function __construct(Container $container)
     {
-        $this->userRepository    = new userRepository();
+        $this->container      = $container;
+        $this->userRepository = $this->container->get('userRepository');
     }
 
     public function getUser(Request $request, Response $response)

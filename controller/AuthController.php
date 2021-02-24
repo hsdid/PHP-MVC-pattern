@@ -7,7 +7,7 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 use app\model\User;
-use app\repository\userRepository;
+use app\services\Container;
 use app\validation\UserValidation;
 
 class AuthController extends Controller
@@ -15,15 +15,18 @@ class AuthController extends Controller
     /** @var userRepository  */
     private $userRepository;
 
-    public function __construct()
-    {
-        $this->userRepository = new userRepository();
+    /** @var Container  */
+    private $container;
+
+    public function __construct(Container $container)
+    {   
+        $this->container      = $container;
+        $this->userRepository = $this->container->get('userRepository');
     }
 
 
     public function register(Request $request, Response $response)
     {
-
 
         if (Application::$app->isLogged()) {
             $response->redirect('/dashboard');
