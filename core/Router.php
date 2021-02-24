@@ -11,12 +11,13 @@ class Router
     public Container $container;
     protected array $routes = [];
 
-    public function __construct(Request $request, Response $response, Container $container)
+    public function __construct(Request $request, Response $response)
     {
         $this->request   = $request;
         $this->response  = $response;
-        $this->container = $container;
     }
+
+    
 
     public function get($path, $callback)
     {
@@ -31,6 +32,12 @@ class Router
     public function delete($path, $callback)
     {
         $this->routes['delete'][$path] = $callback;
+    }
+
+
+    public function setDependencies (Container $container)
+    {
+        $this->container = $container;
     }
 
     public function resolve()
@@ -53,7 +60,12 @@ class Router
             
             $class = $callback[0];
 
-            $callback[0] = new $class($this->container);
+            if  (isset($this->container)){
+                $callback[0] = new $class($this->container);
+            } else {
+                $callback[0] = new $class();
+            }
+            
         }
         
         return call_user_func($callback, $this->request, $this->response);

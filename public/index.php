@@ -22,7 +22,6 @@ $dbConfig = [
 
 $container = new Container();
 
-
 $app = new Application($dbConfig);
 
 $app->router->setDependencies($container);

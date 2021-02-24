@@ -12,6 +12,6 @@ class Database
         $password  = $dbConfig['password'] ?? '';
 
         $this->pdo = new \PDO($dsn, $user, $password);
-        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION); // when problem with connection trow expection
+        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION); 
     }
 }

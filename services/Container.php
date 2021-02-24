@@ -12,12 +12,11 @@ use app\repository\userRepository;
 
 class Container extends DependencyInjector
 {
-    //public DependencyInjector $di;
+    
 
     public function __construct()
     {
-        //$this->di = new DependencyInjector();
-
+       
         $this->register('articleRepository', function(){
             $obj = new articleRepository();
             return $obj;

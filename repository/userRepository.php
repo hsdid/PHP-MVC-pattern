@@ -11,6 +11,11 @@ class userRepository implements RepositoryInterface
     private $userTable;
     private $articleTable;
     private $pdo;
+
+    
+    /**
+     * @var categoryRepository
+     */
     private $categoryRepository;
 
 

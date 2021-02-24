@@ -1,7 +1,8 @@
 <?php
 namespace app\core;
 
-use app\services\Container;
+use app\model\User;
+
 
 class Application
 {
@@ -11,8 +12,7 @@ class Application
     public static Application $app;
     public Session     $session;
     public Database    $db;
-    public Container   $container;
-    public $user;
+    public User        $user;
 
     public function __construct(array $dbConfig)
     {   
@@ -20,8 +20,7 @@ class Application
         $this->request   = new Request();
         $this->response  = new Response();
         $this->session   = new Session();
-        $this->container = new Container();
-        $this->router    = new Router($this->request, $this->response, $this->container);
+        $this->router    = new Router($this->request, $this->response);
         $this->db        = new Database($dbConfig);
     }
 
