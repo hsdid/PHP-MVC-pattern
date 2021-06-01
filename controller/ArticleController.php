@@ -10,10 +10,12 @@ use app\model\Article;
 use app\services\Container;
 use app\validation\ArticleValidation;
 
-
+/**
+ * Class ArticleController
+ * @package app\controller
+ */
 class ArticleController extends Controller
-{   
-    
+{
     /** @var articleRepository  */
     private $articleRepository;
 
@@ -26,16 +28,23 @@ class ArticleController extends Controller
     /** @var Container */
     private $container;
 
- 
+    /**
+     * ArticleController constructor.
+     * @param Container $container
+     * @throws \Exception
+     */
     public function __construct(Container $container)
     {   
-        $this->container = $container;
-        $this->articleRepository = $this->container->get('articleRepository');
+        $this->container          = $container;
+        $this->articleRepository  = $this->container->get('articleRepository');
         $this->categoryRepository = $this->container->get('categoryRepository');
-        $this->authorVoter = $this->container->get('authorVoter');
+        $this->authorVoter        = $this->container->get('authorVoter');
     }
 
-   
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function getCategoryPublicArticles(Request $request, Response $response)
     {
         $body = $request->getBody();
@@ -55,22 +64,21 @@ class ArticleController extends Controller
                     ]);
     }
 
-   
-
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function createArticle(Request $request, Response $response)
     {
         if (! Application::$app->isLogged()) {
             return $response->redirect('/login');
         }
 
-      
         $categories = $this->categoryRepository->findAll();
-        
-        
+
         if ($request->getMethod() === 'post') {
             $body = $request->getBody();
-            
-            
+
             if (! ArticleValidation::Article($body)) {
                 return $response->redirect('/article');
             }
@@ -81,8 +89,6 @@ class ArticleController extends Controller
                 Application::$app->session->setFlash('error_article', 'Same titile already exist');
                 return $response->redirect('/article');
             }
-
-            
 
             $categoryId  = $body['categoryId'];
             $title       = $body['title'];
@@ -104,35 +110,33 @@ class ArticleController extends Controller
         return $this->render('/article/new', ['categories' => $categories]);
     }
 
-
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function editArticle(Request $request, Response $response)
     {
         if (! Application::$app->isLogged()) {
             return $response->redirect('/login');
         }
-        
-        
+        if ($request->getMethod() === 'get') {
 
-        $body    = $request->getBody();
-        $article = $this->articleRepository->findOne('id', $body['articleId']);
-           
-        if (!$this->authorVoter->belongToUser($article)) {
-            Application::$app->session->setFlash('error_dashboard', 'Cant edit this article');
-            return $response->redirect('/dashboard');
+            $body    = $request->getBody();
+            $article = $this->articleRepository->findOne('id', $body['articleId']);
+
+            if (!$this->authorVoter->belongToUser($article)) {
+                Application::$app->session->setFlash('error_dashboard', 'Cant edit this article');
+                return $response->redirect('/dashboard');
+            }
+            $categories = $this->categoryRepository->findAll();
         }
-                
-
-        $categories = $this->categoryRepository->findAll();
-      
-
 
         if ($request->getMethod() === 'post') {
             $articleId = $_GET['articleId'];
             $article = $this->articleRepository->findOne('id', $articleId);
 
             $body = $request->getBody();
-            
-            //validation $body
+
             if (! ArticleValidation::Article($body)) {
                 return $response->redirect('/');
             }
@@ -142,20 +146,23 @@ class ArticleController extends Controller
             $article->setDescription($body['description']);
             $this->articleRepository->update($article);
 
-            
             Application::$app->session->remove('error_dashboard');
             return $response->redirect('/dashboard');
         }
     
         return $this->render(
             'article/edit',
-            [
+                [
                     'article'    => $article,
                     'categories' => $categories
                 ]
         );
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function updateStatus(Request $request, Response $response)
     {
         $body = $request->getBody();
@@ -166,6 +173,10 @@ class ArticleController extends Controller
         $response->redirect('/dashboard');
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function deleteArticle(Request $request, Response $response)
     {
         if (! Application::$app->isLogged()) {
@@ -175,12 +186,13 @@ class ArticleController extends Controller
         $body = $request->getBody();
 
         $article = $this->articleRepository->findOne('id', $body['articleId']);
-        
 
         if (!$this->authorVoter->belongToUser($article)) {
+
             Application::$app->session->setFlash('error_dashboard', 'Cant remove this article');
             return $response->redirect('/dashboard');
         }
+
         $this->articleRepository->remove($article);
 
         Application::$app->session->remove('error_dashboard');

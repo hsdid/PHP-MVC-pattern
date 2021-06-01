@@ -4,8 +4,16 @@ namespace app\validation;
 use app\core\Application;
 use Valitron\Validator;
 
+/**
+ * Class ArticleValidation
+ * @package app\validation
+ */
 class ArticleValidation
 {
+    /**
+     * @param $body
+     * @return bool
+     */
     public static function Article($body)
     {
         $v = new Validator($body);
@@ -27,11 +35,8 @@ class ArticleValidation
             if ($category) {
                 Application::$app->session->setFlash('error_article', $category[0]);
             }
-
-      
             return false;
         }
-    
         Application::$app->session->remove('error_article');
         return true;
     }

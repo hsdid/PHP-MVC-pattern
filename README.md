@@ -21,3 +21,8 @@ Validation library https://github.com/vlucas/valitron
 - Open in browser http://localhost:8000
 
 - sample database on articles.sql
+
+TODO 
+container Di 
+services
+use-case

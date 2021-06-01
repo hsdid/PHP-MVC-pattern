@@ -6,10 +6,20 @@ use app\core\Application;
 use app\core\RepositoryInterface;
 use app\model\Category;
 
+/**
+ * Class categoryRepository
+ * @package app\repository
+ */
 class categoryRepository implements RepositoryInterface
 {
-    private $categoryTable;
-    private $pdo;
+    /**
+     * @var string
+     */
+    private string $categoryTable;
+    /**
+     * @var \PDO
+     */
+    private \PDO $pdo;
 
     
     public function __construct()
@@ -18,7 +28,11 @@ class categoryRepository implements RepositoryInterface
         $this->pdo          = Application::$app->db->pdo;
     }
 
-
+    /**
+     * @param $field
+     * @param $data
+     * @return Category
+     */
     public function findOne($field, $data)
     {
         $table = $this->categoryTable;
@@ -29,11 +43,12 @@ class categoryRepository implements RepositoryInterface
 
         $category = $stmt->fetchObject(Category::class);
 
-        
         return $category;
     }
 
-
+    /**
+     * @return array
+     */
     public function findAll()
     {
         $results = array();

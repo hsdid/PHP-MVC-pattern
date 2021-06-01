@@ -2,33 +2,57 @@
 
 namespace app\core;
 
+/**
+ * Class Session
+ * @package app\core
+ */
 class Session
 {
     public function __construct()
     {
         session_start();
     }
-    public function setFlash($key, $message)
+
+    /**
+     * @param string $key
+     * @param string $message
+     */
+    public function setFlash(string $key, string $message)
     {
         $_SESSION[$key] = $message;
     }
 
-    public function getFlash($key)
+    /**
+     * @param string $key
+     * @return mixed|null
+     */
+    public function getFlash(string $key)
     {
         return $_SESSION[$key]?? null;
     }
 
-    public function set($key, $value)
+    /**
+     * @param string $key
+     * @param string $value
+     */
+    public function set(string $key, string $value)
     {
         $_SESSION[$key] = $value;
     }
 
-    public function get($key)
+    /**
+     * @param string $key
+     * @return mixed|null
+     */
+    public function get(string $key)
     {
         return $_SESSION[$key]?? null;
     }
 
-    public function remove($key)
+    /**
+     * @param string $key
+     */
+    public function remove(string $key)
     {
         unset($_SESSION[$key]);
     }

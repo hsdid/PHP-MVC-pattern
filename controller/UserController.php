@@ -1,5 +1,4 @@
 <?php
-
 namespace app\controller;
 
 use app\core\Controller;
@@ -7,6 +6,10 @@ use app\core\Request;
 use app\core\Response;
 use app\services\Container;
 
+/**
+ * Class UserController
+ * @package app\controller
+ */
 class UserController extends Controller
 {
     /** @var userRepository  */
@@ -14,13 +17,16 @@ class UserController extends Controller
     /** @var Container */
     private $container;
 
-
     public function __construct(Container $container)
     {
         $this->container      = $container;
         $this->userRepository = $this->container->get('userRepository');
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function getUser(Request $request, Response $response)
     {
         $body     = $request->getBody();

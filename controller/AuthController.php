@@ -10,6 +10,10 @@ use app\model\User;
 use app\services\Container;
 use app\validation\UserValidation;
 
+/**
+ * Class AuthController
+ * @package app\controller
+ */
 class AuthController extends Controller
 {
     /** @var userRepository  */
@@ -18,16 +22,23 @@ class AuthController extends Controller
     /** @var Container  */
     private $container;
 
+    /**
+     * AuthController constructor.
+     * @param Container $container
+     * @throws \Exception
+     */
     public function __construct(Container $container)
     {   
         $this->container      = $container;
         $this->userRepository = $this->container->get('userRepository');
     }
 
-
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function register(Request $request, Response $response)
     {
-
         if (Application::$app->isLogged()) {
             $response->redirect('/dashboard');
         }
@@ -66,6 +77,10 @@ class AuthController extends Controller
         return $this->render('register', []);
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function login(Request $request, Response $response)
     {
         if (Application::$app->isLogged()) {
@@ -105,7 +120,10 @@ class AuthController extends Controller
         return $this->render('login', []);
     }
 
-
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function logout(Request $request, Response $response)
     {
         Application::$app->logout();

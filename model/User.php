@@ -1,67 +1,102 @@
 <?php
 namespace app\model;
 
+/**
+ * Class User
+ * @package app\model
+ */
 class User
 {
-    private $id;
-    private $name;
-    private $email;
-    private $password;
-    // private $articles;
-    public static $tableName = 'users';
+    /**
+     * @var int
+     */
+    private int $id;
+    /**
+     * @var string
+     */
+    private string $name;
+    /**
+     * @var string
+     */
+    private string $email;
+    /**
+     * @var string
+     */
+    private string $password;
+    /**
+     * @var string
+     */
+    public static string $tableName = 'users';
 
-    public function getId():int
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * @param int $id
+     */
     public function setId(int $id)
     {
         $this->id = $id;
     }
 
-    public function getName()
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     */
     public function setName(string $name)
     {
         $this->name = $name;
     }
 
-    public function getEmail():string
+    /**
+     * @return string
+     */
+    public function getEmail(): string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     */
     public function setEmail(string $email)
     {
         $this->email = $email;
     }
 
-    public function getPassword():string
+    /**
+     * @return string
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
 
+    /**
+     * @param string $password
+     */
     public function setPassword(string $password)
     {
         $this->password = $password;
     }
 
-    public function tableName():string
+    /**
+     * @return string
+     */
+    public function tableName(): string
     {
         return $this->tableName;
     }
-
-    // public function getArticles():array
-    // {
-    //     return $this->articles;
-    // }
-
-    // public function setArticles(array $arr)
-    // {
-    //     $this->articles = $arr;
-    // }
 }

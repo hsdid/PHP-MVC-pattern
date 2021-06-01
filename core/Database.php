@@ -1,10 +1,21 @@
 <?php
 namespace app\core;
 
+/**
+ * Class Database
+ * @package app\core
+ */
 class Database
 {
+    /**
+     * @var \PDO
+     */
     public \PDO $pdo;
 
+    /**
+     * Database constructor.
+     * @param array $dbConfig
+     */
     public function __construct(array $dbConfig)
     {
         $dsn       = $dbConfig['dsn']      ?? '';

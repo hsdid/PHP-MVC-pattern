@@ -9,14 +9,14 @@ use app\repository\articleRepository;
 use app\repository\categoryRepository;
 use app\repository\userRepository;
 
-
+/**
+ * Class Container
+ * @package app\services
+ */
 class Container extends DependencyInjector
 {
-    
-
     public function __construct()
     {
-       
         $this->register('articleRepository', function(){
             $obj = new articleRepository();
             return $obj;
@@ -36,13 +36,5 @@ class Container extends DependencyInjector
             $obj = new AuthorVoter();
             return $obj;
         });
-
     }
 }
-
-   
-
-
-
-
-

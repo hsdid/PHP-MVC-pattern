@@ -7,13 +7,32 @@ use app\core\RepositoryInterface;
 use app\model\Article;
 use app\model\User;
 
+/**
+ * Class articleRepository
+ * @package app\repository
+ */
 class articleRepository implements RepositoryInterface
-{   
+{
+    /**
+     * @var string
+     */
     private $articleTable;
+    /**
+     * @var \PDO
+     */
     private $pdo;
+    /**
+     * @var userRepository
+     */
     private $userRepository;
+    /**
+     * @var categoryRepository
+     */
     private $categoryRepository;
 
+    /**
+     * articleRepository constructor.
+     */
     public function __construct()
     {
         $this->userTable          = User::$tableName;
@@ -23,7 +42,11 @@ class articleRepository implements RepositoryInterface
         $this->userRepository     = new userRepository();
     }
 
-
+    /**
+     * @param $field
+     * @param $data
+     * @return Article|bool
+     */
     public function findOne($field, $data)
     {
         $table = $this->articleTable;
@@ -34,7 +57,7 @@ class articleRepository implements RepositoryInterface
 
         $article = $stmt->fetchObject(Article::class);
         if (!$article) {
-            return null;
+            return false;
         }
         $user = $this->userRepository->findOne('id', $article->getUserId());
         $article->setUser($user);
@@ -44,8 +67,11 @@ class articleRepository implements RepositoryInterface
 
         return $article;
     }
-    
-    public function findAll(): array
+
+    /**
+     * @return array
+     */
+    public function findAll()
     {
         $results = array();
         $tableA = $this->articleTable;
@@ -70,7 +96,10 @@ class articleRepository implements RepositoryInterface
         return $results;
     }
 
-    
+    /**
+     * @param $category
+     * @return array
+     */
     public function findCategoryPublicArticles($category): array
     {   
         $results = array();
@@ -102,6 +131,11 @@ class articleRepository implements RepositoryInterface
         return $results;
     }
 
+    /**
+     * @param $category
+     * @param $user
+     * @return array
+     */
     public function findUserCategoryArticles($category, $user): array
     {
         $results = array();
@@ -132,8 +166,10 @@ class articleRepository implements RepositoryInterface
         return $results;
     }
 
-
-
+    /**
+     * @param $article
+     * @return Article
+     */
     public function create($article)
     {
         $table = $this->articleTable;
@@ -152,6 +188,10 @@ class articleRepository implements RepositoryInterface
         return $article;
     }
 
+    /**
+     * @param Article $article
+     * @return bool
+     */
     public function update(Article $article)
     {
         $table  = $this->articleTable;
@@ -167,6 +207,11 @@ class articleRepository implements RepositoryInterface
         return $stmt->execute([$categoryId, $title, $description, $articleId]);
     }
 
+    /**
+     * @param $status
+     * @param $articleId
+     * @return bool
+     */
     public function updateStatus($status, $articleId)
     {
         $table  = $this->articleTable;
@@ -177,7 +222,10 @@ class articleRepository implements RepositoryInterface
         return $stmt->execute([$status, $articleId]);
     }
 
-    
+    /**
+     * @param $article
+     * @return bool|null
+     */
     public function remove($article)
     {
         if (!$article) {

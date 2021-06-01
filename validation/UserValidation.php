@@ -4,8 +4,16 @@ namespace app\validation;
 use app\core\Application;
 use Valitron\Validator;
 
+/**
+ * Class UserValidation
+ * @package app\validation
+ */
 class UserValidation
 {
+    /**
+     * @param $body
+     * @return bool
+     */
     public static function register($body)
     {
         $v = new Validator($body);
@@ -35,16 +43,16 @@ class UserValidation
             if ($confirmPass) {
                 Application::$app->session->setFlash('error_register', $confirmPass[0]);
             }
-
-      
             return false;
         }
-    
         Application::$app->session->remove('error_register');
         return true;
     }
 
-
+    /**
+     * @param $body
+     * @return bool
+     */
     public static function login($body)
     {
         $v = new Validator($body);
@@ -63,10 +71,8 @@ class UserValidation
             if ($password) {
                 Application::$app->session->setFlash('error_login', $password[0]);
             }
-        
             return false;
         }
-    
         Application::$app->session->remove('error_login');
         return true;
     }

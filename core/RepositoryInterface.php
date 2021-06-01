@@ -1,6 +1,9 @@
 <?php
 namespace app\core;
-
+/**
+ * Interface RepositoryInterface
+ * @package app\core
+ */
 interface RepositoryInterface
 {
     public function findOne($field, $data);

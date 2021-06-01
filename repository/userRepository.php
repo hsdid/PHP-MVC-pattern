@@ -6,18 +6,29 @@ use app\core\RepositoryInterface;
 use app\model\User;
 use app\model\Article;
 
+/**
+ * Class userRepository
+ * @package app\repository
+ */
 class userRepository implements RepositoryInterface
 {
-    private $userTable;
-    private $articleTable;
+    /**
+     * @var string
+     */
+    private string $userTable;
+    /**
+     * @var string
+     */
+    private string $articleTable;
+    /**
+     * @var \PDO
+     */
     private $pdo;
 
-    
     /**
      * @var categoryRepository
      */
     private $categoryRepository;
-
 
     public function __construct()
     {
@@ -27,6 +38,10 @@ class userRepository implements RepositoryInterface
         $this->categoryRepository = new categoryRepository();
     }
 
+    /**
+     * @param $user
+     * @return User
+     */
     public function create($user)
     {
         $table = $this->userTable;
@@ -41,7 +56,10 @@ class userRepository implements RepositoryInterface
         return $user;
     }
 
-    public function findAll()
+    /**
+     * @return array
+     */
+    public function findAll(): array
     {
         $results = array();
         $table = $this->userTable;
@@ -57,8 +75,12 @@ class userRepository implements RepositoryInterface
         return $results;
     }
 
-   
-    public function findOne($field, $data): User
+    /**
+     * @param $field
+     * @param $data
+     * @return User|bool
+     */
+    public function findOne($field, $data)
     {
         $table = $this->userTable;
         
@@ -70,6 +92,10 @@ class userRepository implements RepositoryInterface
         return $stmt->fetchObject(User::class);
     }
 
+    /**
+     * @param $user
+     * @return User|bool
+     */
     public function remove($user)
     {
         $userId = $user->getId;
@@ -83,7 +109,10 @@ class userRepository implements RepositoryInterface
         return $stmt->fetchObject(User::class);
     }
 
-
+    /**
+     * @param User $user
+     * @return array|bool
+     */
     public function findArticles(User $user)
     {
         $results = array();
@@ -111,6 +140,10 @@ class userRepository implements RepositoryInterface
         return $results;
     }
 
+    /**
+     * @param User $user
+     * @return array|bool
+     */
     public function findPublicArticles(User $user)
     {
         $results = array();

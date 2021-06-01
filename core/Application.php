@@ -3,17 +3,43 @@ namespace app\core;
 
 use app\model\User;
 
-
+/**
+ * Class Application
+ * @package app\core
+ */
 class Application
 {
+    /**
+     * @var Router
+     */
     public Router      $router;
+    /**
+     * @var Request
+     */
     public Request     $request;
+    /**
+     * @var Response
+     */
     public Response    $response;
+    /**
+     * @var Application
+     */
     public static Application $app;
+    /**
+     * @var Session
+     */
     public Session     $session;
+    /**
+     * @var Database
+     */
     public Database    $db;
-    public User        $user;
 
+    public $user;
+
+    /**
+     * Application constructor.
+     * @param array $dbConfig
+     */
     public function __construct(array $dbConfig)
     {   
         self::$app       = $this;
@@ -28,7 +54,10 @@ class Application
     {
         echo $this->router->resolve();
     }
-    
+
+    /**
+     * @return bool
+     */
     public function isLogged()
     {
         if ($this->session->get('user')) {
@@ -37,6 +66,9 @@ class Application
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function isGuest()
     {
         if (!$this->session->get('user')) {
@@ -45,8 +77,11 @@ class Application
         return false;
     }
 
-
-    public function login($user)
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function login(User $user)
     {
         $this->user = $user;
         $this->session->set('user', $user->getId());

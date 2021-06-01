@@ -19,7 +19,6 @@ $dbConfig = [
     'pass' => $_ENV['DB_PASSWORD']
 ];
 
-
 $container = new Container();
 
 $app = new Application($dbConfig);

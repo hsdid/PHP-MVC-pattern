@@ -1,5 +1,4 @@
 <?php
-
 namespace app\controller;
 
 use app\core\Application;
@@ -8,6 +7,10 @@ use app\core\Request;
 use app\core\Response;
 use app\services\Container;
 
+/**
+ * Class SiteController
+ * @package app\controller
+ */
 class SiteController extends Controller
 {
     /** @var categoryRepository  */
@@ -24,7 +27,11 @@ class SiteController extends Controller
         $this->categoryRepository = $this->container->get('categoryRepository');
         
     }
-    
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function dashboard(Request $request, Response $response)
     {
         if (! Application::$app->isLogged()) {
